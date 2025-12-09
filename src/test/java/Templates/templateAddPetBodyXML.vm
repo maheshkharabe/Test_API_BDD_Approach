@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Pet>
+	<id>$PetBody.Pet_id[0]</id>
+	<Category>
+		<id>$PetBody.Pet_Category_id[0]</id>
+		<name>$PetBody.Pet_Category_name[0]</name>
+	</Category>
+	<name>$PetBody.Pet_name[0]</name>
+	<photoUrls>
+	    #foreach($url in $PetBody.Pet_photoUrls_photoUrl)
+           <photoUrl>$url</photoUrl>
+        #end
+	</photoUrls>
+	<tags>
+	   #macro(addTag $id $name)
+		    <Tag>
+			    <id>$id</id>
+			    <name>$name</name>
+		    </Tag>
+		#end
+		#set ($i = 0)
+		#foreach($val in $PetBody.Pet_tags_Tag_id)
+		    #addTag($PetBody.Pet_tags_Tag_id[$i] $PetBody.Pet_tags_Tag_Name[$i])
+		    #set ($i = $i + 1)
+		#end
+	</tags>
+	<status>$PetBody.Pet_status[0]</status>
+</Pet>

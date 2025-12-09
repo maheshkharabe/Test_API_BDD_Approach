@@ -1,0 +1,33 @@
+{
+  #if(!($PetBody.Pet_id[0] == '')) ##comment-To avoid empty elements, Logically add to body only when values are available.
+  "id": $PetBody.Pet_id[0],
+  #end
+  "category": {
+    #if(!($PetBody.Pet_Category_id[0] == ''))
+     "id": $PetBody.Pet_Category_id[0],
+    #end
+     #if(!($PetBody.Pet_Category_name[0] == ''))
+    "name": "$PetBody.Pet_Category_name[0]"
+    #end
+   },
+  "name": "$PetBody.Pet_name[0]",
+  "photoUrls":[#foreach($url in $PetBody.Pet_photoUrls_photoUrl)
+                "$url"#if( $foreach.hasNext ),#end
+                #end],
+  "tags": [
+           #macro(addTag $id $name){
+                "id": $id,
+                "name": "$name"}
+            #end
+            #set ($i = 0)
+            #if(!($PetBody.Pet_tags_Tag_id[0] == ''))
+                #foreach($val in $PetBody.Pet_tags_Tag_id)
+                    #addTag($PetBody.Pet_tags_Tag_id[$i] $PetBody.Pet_tags_Tag_Name[$i])#if( $foreach.hasNext ),#end
+                    #set ($i = $i + 1)
+                #end
+             #end
+             ]
+  #if(!($PetBody.Pet_status[0] == ''))
+      , "status": "$PetBody.Pet_status[0]"
+  #end
+}
