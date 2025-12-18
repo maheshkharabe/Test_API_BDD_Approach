@@ -17,7 +17,7 @@ import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
-public class PetStore{
+public class PetStoreHelper {
 
     String[] dataSet = null;
     DataFormatter objDataFormatter = new DataFormatter();
@@ -118,9 +118,9 @@ public class PetStore{
                 given()
                         .spec(reqSpec)
                         .body(requestBody)
-                        .when()
+                .when()
                         .post(addPetEndPointURL)
-                        .then()
+                .then()
                         .log().all()
                         .extract().response();
 
@@ -130,6 +130,27 @@ public class PetStore{
 
     }//end addPetEndPoint
 
+    public Response getPetWithPetIDMethod(Map<String,List<String>> petData,String id){
+
+        RequestSpecification reqSpec = new RequestSpecBuilder()
+                .addHeader(petData.get("HRD_ACCEPT_NAME").get(0),petData.get("HRD_ACCEPT_VALUE").get(0))
+                .build();
+
+        String getPetEndPointURL = TestConfigsForAPIPetStore.BASE_URL + TestConfigsForAPIPetStore.GET_PET_PATH +"{petId}" ;
+        System.out.println("****** Hitting Get Pet ByID:"+getPetEndPointURL);
+        Response response=
+                given()
+                        .spec(reqSpec)
+                        .pathParam("petId",id)
+                .when()
+                        .get(getPetEndPointURL)
+                .then()
+                        .log().all()
+                        .extract().response();
+
+        return response;
+    }//end getPetData
+
     public Response getPetWithPetIDMethod(String id){
 
         String getPetEndPointURL = TestConfigsForAPIPetStore.BASE_URL + TestConfigsForAPIPetStore.GET_PET_PATH +"{petId}" ;
@@ -137,9 +158,9 @@ public class PetStore{
         Response response=
                 given()
                         .pathParam("petId",id)
-                        .when()
+                .when()
                         .get(getPetEndPointURL)
-                        .then()
+                .then()
                         .log().all()
                         .extract().response();
 

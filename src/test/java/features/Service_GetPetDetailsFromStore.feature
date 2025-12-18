@@ -13,8 +13,8 @@ Feature: Get Pet details from store
 
     Examples:
       |Unique_Test_Case_ID                                |SheetName|ExpectedResponseCode|
-      |TC_01_Add_Pet_To_Store_XML_input_AllFieldsProvided |GET_PET  |200                 |
-      |TC_02_Add_Pet_To_Store_Json_input_AllFieldsProvided|GET_PET  |200                 |
+      |TC_01_Pet_In_Store_XML_input_AllFieldsProvided     |GET_PET  |200                 |
+      |TC_02_Pet_In_Store_Json_input_AllFieldsProvided    |GET_PET  |200                 |
 
   @Regression
   Scenario Outline: Retrieve pet details from store with Invalid data
@@ -27,4 +27,5 @@ Feature: Get Pet details from store
 
     Examples:
       |Unique_Test_Case_ID                                      |SheetName|ExpectedResponseCode|expRespBodyCode|expRespBodyStdType|expRespBodyStdMessage|
-      |TC_03_Get_Pet_From_Store_with_invalid_PetID_doesnt_exist |GET_PET  |404                 |1              |error             |Pet not found        |
+      |TC_03_Pet_In_Store_XML_with_invalid_PetID_doesnt_exist   |GET_PET  |404                 |1              |error             |Pet not found        |
+      |TC_04_Pet_In_Store_JSON_with_invalid_PetID_doesnt_exist  |GET_PET  |404                 |1              |error             |Pet not found        |

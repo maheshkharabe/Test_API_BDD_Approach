@@ -22,12 +22,12 @@ import java.util.Map;
 
 public class AddPetServiceImplementation {
 
-    PetStore objPetStore = new PetStore();
+    PetStoreHelper objPetStoreHelper = new PetStoreHelper();
     DateTimeUtils objDateTimeUtil = new DateTimeUtils();
     Map<String,List<String>> addPetDataReceivedMap =null;
     String peIDUsedForAddPetService=null;
     String addPetRequestBody=null;
-    Response addPathMethodResponse=null;
+    Response addPetMethodResponse =null;
     SoftAssert sftAssert=null;
 
     @BeforeStep
@@ -41,19 +41,19 @@ public class AddPetServiceImplementation {
 
     @Given("user_provides_information\\({string},{string})")
     public void user_provides_information(String uniqueTestID,String sheetName){
-        addPetDataReceivedMap = objPetStore.getExcelPetDataToMap(uniqueTestID,sheetName);
+        addPetDataReceivedMap = objPetStoreHelper.getExcelPetDataToMap(uniqueTestID,sheetName);
        }
 
     @When("user_calls_addPet_Service")
     public void user_calls_add_pet_service() {
         peIDUsedForAddPetService = addPetDataReceivedMap.get("Pet_id").get(0);//retrieve PetID from Excel
-        if (peIDUsedForAddPetService.toUpperCase().equals("FALSE")){//If petID val is FALSE in Excel, create new PetID
+        if (peIDUsedForAddPetService.toUpperCase().equals("CREATE_NEW")){//If petID val is CREATE_NEW in Excel, create new PetID
             peIDUsedForAddPetService=objDateTimeUtil.currentDate_yyyyMMdd+objDateTimeUtil.currentTime_hhMMssSSS;
             System.out.println("Pet ID generated:"+peIDUsedForAddPetService);
         }
         addPetDataReceivedMap.put("Pet_id", Arrays.asList(peIDUsedForAddPetService)); //update PetID value
-        addPetRequestBody= objPetStore.generateAddPetRequestBodyFromMap(addPetDataReceivedMap);;
-        addPathMethodResponse = objPetStore.addPetMethod(addPetDataReceivedMap,addPetRequestBody);
+        addPetRequestBody= objPetStoreHelper.generateAddPetRequestBodyFromMap(addPetDataReceivedMap);;
+        addPetMethodResponse = objPetStoreHelper.addPetMethod(addPetDataReceivedMap,addPetRequestBody);
     }
     @Then("addPet_service_returns_code_{int}")
     public void addPet_service_returns_code_(int expStatusCode) {
@@ -62,7 +62,7 @@ public class AddPetServiceImplementation {
             String insertStatement = SqlStatements.creteInsertStatementOnPetDetails(addPetDataReceivedMap);
             H2_DB_Manager.updateDBTable(insertStatement);
         }
-        Assert.assertEquals(addPathMethodResponse.getStatusCode(),expStatusCode,"Incorrect status code");
+        Assert.assertEquals(addPetMethodResponse.getStatusCode(),expStatusCode,"Incorrect status code");
     }
 
     @And("addPet_service_returns_response_body")
@@ -70,12 +70,12 @@ public class AddPetServiceImplementation {
         String typeOfPayload = addPetDataReceivedMap.get("PayloadType").get(0);//read Payload Type
         String petIdInResponseBody="";
         if(typeOfPayload.equalsIgnoreCase("json")) {
-            JsonPath jsonRespBody = addPathMethodResponse.jsonPath();
+            JsonPath jsonRespBody = addPetMethodResponse.jsonPath();
             petIdInResponseBody = jsonRespBody.getString("id");
             System.out.println("PetID from response body:" + petIdInResponseBody);
         }
         else if(typeOfPayload.equalsIgnoreCase("xml")) {
-            XmlPath path = addPathMethodResponse.xmlPath();
+            XmlPath path = addPetMethodResponse.xmlPath();
             petIdInResponseBody = path.getString("Pet/id/text()");
             System.out.println("PetID from response body:" + petIdInResponseBody);
         }

@@ -19,4 +19,5 @@ Feature: Integration check for Add and get pet details
 
     Examples:
       |Unique_Test_Case_ID                                   |SheetName|ExpectedResponseCode|
-      |TC_01_Add_Pet_To_Store_XML_input_AllFieldsProvided    |ADD_PET  |200				    |
+      |TC_01_Pet_In_Store_XML_input_AllFieldsProvided        |ADD_PET  |200				    |
+      |TC_02_Pet_In_Store_Json_input_AllFieldsProvided       |ADD_PET  |200				    |

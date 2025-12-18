@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Pet">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded"> <!--choice allows tags in any sequence, no order validated  -->
+                <xs:element name="id" type="xs:unsignedLong" minOccurs="0"  maxOccurs="1"/>
+                <xs:element name="Category" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="id" type="xs:unsignedByte" />
+                            <xs:element name="name" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="name" type="xs:string" maxOccurs="1"/> <!--minOccurs default is 1  -->
+                <xs:element name="photoUrls" maxOccurs="1"> <!--minOccurs default is 1  -->
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="photoUrl" type="xs:string"  maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="tags" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Tag" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="id" type="xs:unsignedByte" />
+                                        <xs:element name="name" type="xs:string" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="status" type="xs:string" minOccurs="0"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
